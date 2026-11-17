@@ -34,15 +34,61 @@ void searchStudent(List students) {
       print("Name is ${student['name']}");
       print("Age is ${student['Age']}");
       print("Registration No is ${student['R_No']}");
+      found = true;
+      break;
+    } else {
+      print("${found == 0 ? "Student Not found" : null}");
     }
-    found = true;
-    break;
   }
 }
 
+void deleteStudents(List<Map<String, dynamic>> students) {
+  stdout.write("Enter student Registration Number");
+  String reg_no = stdin.readLineSync()!;
+  int previousLength = students.length;
+  students.removeWhere((student) => student['R_No'] == reg_no);
+  if (students.length < previousLength) {
+    print("Student Deleted!");
+  } else {
+    print("Student Deleted!");
+  }
+}
+
+void updateStudent(List<Map<String, dynamic>> students) {
+  stdout.write("Enter Registration Number: ");
+  String regNo = stdin.readLineSync()!;
+
+  bool found = false;
+
+  for (var student in students) {
+    if (student['R_No'] == regNo) {
+      stdout.write("Enter New Name: ");
+      student['name'] = stdin.readLineSync()!;
+
+      stdout.write("Enter New Age: ");
+      student['Age'] = int.parse(stdin.readLineSync()!);
+
+      stdout.write("Enter New Class: ");
+      student['Class'] = stdin.readLineSync()!;
+
+      print("Student Updated Successfully!");
+      found = true;
+      break;
+    }
+  }
+
+  if (!found) {
+    print("Student Not Found!");
+  }
+}
+
+void exitSystem() {
+  print("Thank you for using Student Management System!");
+  exit(0);
+}
+
 void main() {
-  print("Welcome To Studenet Management System");
-  const int? totalMarks = 500;
+  print("Welcome To Student Management System");
 
   List<Map<String, dynamic>> Students = [
     {
@@ -51,43 +97,55 @@ void main() {
       'Class': "Mobile Application",
       'R_No': '23PWCSE2296',
       'Marks': {
-        "Theroy": 86,
+        "Theory": 86,
         "Practical": 86,
         "Assignments": 86,
         "Projects": 86,
-        "Quizs": 86,
+        "Quizzes": 86,
       },
     },
   ];
 
-  stdout.write("Enter choice");
-  int? choice = int.parse(stdin.readLineSync()!);
+  while (true) {
+    print("\n========== STUDENT MANAGEMENT SYSTEM ==========");
+    print("1. View Students");
+    print("2. Add Student");
+    print("3. Search Student");
+    print("4. Delete Student");
+    print("5. Update Student");
+    print("6. Exit");
 
-  switch (choice) {
-    case 1:
-      //View Students
-      viewStudents(Students);
-      break;
+    stdout.write("\nEnter Your Choice: ");
+    int? choice = int.tryParse(stdin.readLineSync()!);
 
-    case 2:
-      //add Student
-      Students.add(addStudent());
-      viewStudents(Students);
-      break;
-    case 3:
-      //Search Student
+    switch (choice) {
+      case 1:
+        viewStudents(Students);
+        break;
 
-      searchStudent(Students);
-      break;
-    case 4:
-      //View Students
-      break;
-    case 5:
-      //Delete Student
-      break;
+      case 2:
+        Students.add(addStudent());
+        print("Student Added Successfully!");
+        break;
 
-    case 6:
-      //View Students
-      break;
+      case 3:
+        searchStudent(Students);
+        break;
+
+      case 4:
+        deleteStudents(Students);
+        break;
+
+      case 5:
+        updateStudent(Students);
+        break;
+
+      case 6:
+        exitSystem();
+        break;
+
+      default:
+        print("Invalid Choice! Please Select 1-6.");
+    }
   }
 }
